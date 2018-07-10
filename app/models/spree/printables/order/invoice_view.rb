@@ -11,14 +11,20 @@ module Spree
                    :shipments
 
     def items
+      tax = all_adjustments.tax
       printable.line_items.map do |item|
+        tax = item.adjustments.eligible.sum(:amount)
         Spree::Printables::Invoice::Item.new(
           sku: item.variant.sku,
           name: item.variant.name,
           options_text: item.variant.options_text,
           price: item.price,
+          net: item.price - tax,
           quantity: item.quantity,
-          total: item.total
+          total: item.total,
+          mrp: item.variant.product.mrp_price,
+          tax: tax,
+          tax_type: item.tax_category.tax_code
         )
       end
     end
