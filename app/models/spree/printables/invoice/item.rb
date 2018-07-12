@@ -3,7 +3,7 @@ module Spree
     extend Spree::DisplayMoney
 
     attr_accessor :delivery_charge, :sku, :mrp, :name, :net, :options_text, :price,
-                  :quantity, :total, :tax, :tax_code, :tax_rate, :tax_type
+                  :quantity, :total, :tax, :tax_code, :tax_rate
 
     money_methods :delivery_charge, :mrp, :net, :price, :total, :tax
 

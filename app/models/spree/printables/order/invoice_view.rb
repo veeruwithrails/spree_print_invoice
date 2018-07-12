@@ -11,7 +11,6 @@ module Spree
                    :shipments
 
     def items
-      tax_type = shipment_state == stock_loc_state ? 'CGST+SGST' : 'IGST'
       printable.line_items.map do |item|
         tax = item.adjustments.eligible.sum(:amount)
         tax_cat = item.tax_category
@@ -28,26 +27,29 @@ module Spree
           tax: tax,
           tax_code: tax_cat.try(:tax_code),
           tax_rate: tax_rate,
-          tax_type: tax_type,
           delivery_charge: item.delivery_charge
         )
       end
     end
 
     def firstname
-      printable.tax_address.firstname
+      printable.tax_address.firstname.capitalize
     end
 
     def lastname
-      printable.tax_address.lastname
+      printable.tax_address.lastname.capitalize
     end
 
     def stock_loc_state
-      shipments.first.stock_location.state_id
+      stock_location.state_id
     end
 
     def shipment_state
       ship_address.state_id
+    end
+
+    def stock_location
+      printable.stock_locations.first
     end
 
     private
